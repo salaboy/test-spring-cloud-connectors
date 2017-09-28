@@ -4,13 +4,17 @@ import org.salaboy.streams.PaymentService;
 import org.springframework.cloud.service.ServiceConnectorConfig;
 import org.springframework.cloud.service.ServiceConnectorCreator;
 import org.springframework.cloud.service.ServiceInfo;
+import org.springframework.cloud.service.UriBasedServiceInfo;
+import org.springframework.web.client.RestTemplate;
 
 public class PaymentServiceConnectorCreator implements ServiceConnectorCreator {
 
     @Override
     public Object create(ServiceInfo serviceInfo,
                          ServiceConnectorConfig serviceConnectorConfig) {
-        return new PaymentServiceImpl();
+
+        return new PaymentServiceImpl(new RestTemplate(),
+                                      (UriBasedServiceInfo) serviceInfo);
     }
 
     @Override

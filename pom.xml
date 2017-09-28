@@ -35,6 +35,7 @@
     <spring.boot.version>2.0.0.M3</spring.boot.version>
     <spring.cloud.version>Finchley.M2</spring.cloud.version>
     <spring.cloud.stream.version>Ditmars.M2</spring.cloud.stream.version>
+    <spring.cloud.kubernetes.version>0.2.1.BUILD-SNAPSHOT</spring.cloud.kubernetes.version>
   </properties>
 
   <repositories>
@@ -90,7 +91,15 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-kubernetes</artifactId>
+      <version>${spring.cloud.kubernetes.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-localconfig-connector</artifactId>

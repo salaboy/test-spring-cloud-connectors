@@ -15,8 +15,10 @@ public class PaymentServiceInfoCreator extends LocalConfigServiceInfoCreator {
 
     @Override
     public boolean accept(Object o) {
-        System.out.println("accept this o??? " + o);
-        return true;
+        if(o instanceof UriBasedServiceData) {
+            return true;
+        }
+        return false;
     }
 
     @Override

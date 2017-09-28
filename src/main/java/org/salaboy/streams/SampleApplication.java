@@ -17,10 +17,14 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.support.MessageBuilder;
 
 @SpringBootApplication
 @EnableBinding(MyChannels.class)
+
 public class SampleApplication implements CommandLineRunner {
 
     @Autowired
@@ -44,23 +48,25 @@ public class SampleApplication implements CommandLineRunner {
         }
     }
 
-    @StreamListener(value = MyChannels.INTEGRATION_EVENTS_CONSUMER)
-    public void consumeIntegrationEvents(IntegrationEvent event) {
+    @StreamListener(value = MyChannels.INTEGRATION_EVENTS_CONSUMER, condition = "headers['type']=='Payment'")
+    public void consumePaymentIntegrationEvents(IntegrationEvent event, @Header("processDefinitionId") String processDefinitionId) {
         System.out.println("Recieved Integration Event: " + event);
+        System.out.println("Integration Event with processDefId in header:" + processDefinitionId);
+
         PaymentService payment = cloud.getServiceConnector("payment",
                                                            PaymentService.class,
                                                            null);
 
         if (payment == null) {
-            throw new IllegalStateException("null rest template to connect to payment service!");
+            throw new IllegalStateException("finding a payment service failed !");
         }
-        System.out.println(">>> Rest Template OK!!!");
 
-        String s = payment.doPayment("1000");
+
+        String result = payment.doPayment("GBP", 123.4, "new minibrute", "ABC-123");
 
         Map<String, Object> variables = new HashMap<>();
-        variables.put("payment-result",
-                      s);
+        variables.put("payment-status",
+                      result);
 
         IntegrationResult integrationResult = new IntegrationResult(event.getCorrelationId(),
                                                                     variables);

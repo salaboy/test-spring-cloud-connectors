@@ -12,7 +12,7 @@ You need to also create a file in /tmp/myApp/
 With the following content: 
 
 spring.cloud.appId=myApp
-spring.cloud.payment=payment://user:password@host:port/context
+spring.cloud.payment=payment://user:password@localhost:8081/context
 
 In order to reproduce you should:
 1) cd docker/

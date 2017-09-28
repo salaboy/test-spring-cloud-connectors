@@ -24,6 +24,7 @@ import java.util.UUID;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.salaboy.streams.model.AsyncContext;
 import org.salaboy.streams.model.IntegrationEvent;
 import org.salaboy.streams.model.IntegrationResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -56,6 +57,7 @@ public class MyAppStreamsTest {
     @ClassRule
     public static RabbitTestSupport rabbitTestSupport = new RabbitTestSupport();
 
+    private static Map<String, AsyncContext> correlation = new HashMap<>();
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -67,29 +69,55 @@ public class MyAppStreamsTest {
     @EnableAutoConfiguration
     public static class StreamHandler {
 
-
         @StreamListener(value = ClientStreams.INTEGRATION_RESULT_CONSUMER)
         public void consumeIntegrationResults(IntegrationResult integrationResult) throws InterruptedException {
-            System.out.println(">>> integrationResult: " + integrationResult);
-//
+            System.out.println(">>> Result Recieved Back from Connector: " + integrationResult);
+            String correlationId = integrationResult.getCorrelationId();
+            AsyncContext context = correlation.get(correlationId);
+            assertThat(integrationResult.getVariables().get("payment-status")).isEqualTo("\"APPROVED\"");
+            System.out.println(">> Continue with processDefinition: " + context.getProcessInstanceId());
+            System.out.println(">> \t\t Task: " + context.getProcessInstanceId());
+
             integrationResultArrived = true;
         }
     }
 
     @Test
-    public void getAllMessagesTests() throws Exception {
+    public void sendIntegrationEventTest() throws Exception {
         Map<String, Object> variables = new HashMap<>();
         variables.put("var1",
                       "value1");
         variables.put("var2",
                       new Long(1));
-        String correlationId = UUID.randomUUID().toString();
+        String correlationId = "correlationId-" + UUID.randomUUID().toString();
+        String processInstanceId = "processInstanceId-" + UUID.randomUUID().toString();
+        String processDefinitionId = "processDefinitionId-" + UUID.randomUUID().toString();
+        String taskId = "taskId-" + UUID.randomUUID().toString();
+        String executionId = "executionId-" + UUID.randomUUID().toString();
+
+        correlation.put(correlationId,
+                        new AsyncContext(processInstanceId,
+                                         taskId,
+                                         executionId));
+
         IntegrationEvent integrationEvent = new IntegrationEvent(correlationId,
+                                                                 processInstanceId,
+                                                                 taskId,
+                                                                 executionId,
                                                                  variables);
-        Message<IntegrationEvent> message = MessageBuilder.withPayload(integrationEvent).build();
+
+        // We will send the Integration Event with data inside, and the HEADERs will contain data that we might want to use to filter.
+
+        Message<IntegrationEvent> message = MessageBuilder.withPayload(integrationEvent)
+                .setHeader("type",
+                           "Payment")
+                .setHeader("processDefinitionId", // this is option and only if we are interested in fitering by processDefinitionId
+                           processDefinitionId)
+                .build();
+
         integrationEventsProducer.send(message);
 
-        while(!integrationResultArrived){
+        while (!integrationResultArrived) {
             System.out.println("Waiting for result to arrive ...");
             Thread.sleep(100);
         }
