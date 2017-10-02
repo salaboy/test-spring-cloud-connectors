@@ -10,6 +10,7 @@
     <spring.boot.version>2.0.0.M3</spring.boot.version>
     <spring.cloud.version>Finchley.M2</spring.cloud.version>
     <spring.cloud.stream.version>Ditmars.M2</spring.cloud.stream.version>
+    <maven.docker.plugin.version>0.21.0</maven.docker.plugin.version>
     <!--<spring.cloud.kubernetes.version>0.2.1.BUILD-SNAPSHOT</spring.cloud.kubernetes.version>-->
   </properties>
 
