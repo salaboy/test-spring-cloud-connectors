@@ -46,7 +46,7 @@
                   <port>8081:8080</port>
                 </ports>
                 <wait>
-                  <log>Started PaymentsApplication .* started in</log>
+                  <log>Started PaymentsApplication</log>
                   <time>40000</time>
                 </wait>
               </run>

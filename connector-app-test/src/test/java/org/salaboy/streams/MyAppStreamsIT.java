@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.*;
 @TestPropertySource("classpath:test-application.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @EnableBinding(ClientStreams.class)
-public class MyAppStreamsTest {
+public class MyAppStreamsIT {
 
     private static final String relativeResultsEndpoint = "/api/results";
     private static final String callEndpoint = "/api/call";
