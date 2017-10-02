@@ -39,7 +39,7 @@
           <images>
             <!-- A single's image configuration -->
             <image>
-              <name>salaboy/payments</name>
+              <name>salaboy/payment-service</name>
               <alias>payments</alias>
               <run>
                 <ports>
