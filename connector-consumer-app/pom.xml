@@ -9,7 +9,7 @@
   <version>1.0-SNAPSHOT</version>
 </parent>
 
-  <artifactId>connectors-app-test</artifactId>
+  <artifactId>connector-consumer-app</artifactId>
   <build>
     <plugins>
       <plugin>
@@ -112,7 +112,7 @@
   <dependencies>
     <dependency>
       <groupId>org.salaboy</groupId>
-      <artifactId>test-payment-connector</artifactId>
+      <artifactId>payments-local-connector</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

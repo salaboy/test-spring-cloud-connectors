@@ -15,10 +15,10 @@
   </properties>
 
   <modules>
-    <module>test-payment-api</module>
-    <module>test-payment-connector</module>
-    <module>payments</module>
-    <module>connector-app-test</module>
+    <module>payments-api</module>
+    <module>payments-local-connector</module>
+    <module>payments-service</module>
+    <module>connector-consumer-app</module>
   </modules>
 
   <repositories>

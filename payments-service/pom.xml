@@ -8,12 +8,12 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>payments</artifactId>
+  <artifactId>payments-service</artifactId>
 
   <packaging>jar</packaging>
 
   <name>payments</name>
-  <description>Payments Demo</description>
+  <description>Payments Service Demo</description>
 
 
   <dependencies>
