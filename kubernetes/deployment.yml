@@ -89,10 +89,11 @@ kind: Service
 metadata:
   name: payment
   namespace: default
+  labels:
+    spring-cloud-service: payment
 spec:
   selector:
     app: payment
-    spring-cloud-service: payment
   ports:
     - port: 8081
       targetPort: 8080

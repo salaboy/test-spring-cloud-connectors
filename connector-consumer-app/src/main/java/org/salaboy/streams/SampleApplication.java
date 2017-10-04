@@ -47,6 +47,8 @@ public class SampleApplication implements CommandLineRunner {
         assert (integrationResultsProducer != null);
         List<ServiceInfo> serviceInfos = cloud.getServiceInfos();
         System.out.println("Service Infos size = " + serviceInfos.size());
+        System.out.println("Cloud Properties: "+ cloud.getCloudProperties());
+        System.out.println("Cloud Application Instance: "+ cloud.getApplicationInstanceInfo());
         for (ServiceInfo s : serviceInfos) {
             System.out.println(">>> Service Info: " + s.getId());
         }

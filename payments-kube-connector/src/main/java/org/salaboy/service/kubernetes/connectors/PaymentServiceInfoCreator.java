@@ -5,6 +5,10 @@ import org.springframework.cloud.kubernetes.connector.KubernetesServiceInfoCreat
 
 public class PaymentServiceInfoCreator extends KubernetesServiceInfoCreator<PaymentServiceInfo> {
 
+    public PaymentServiceInfoCreator() {
+        super("payment");
+    }
+
     public PaymentServiceInfoCreator(String identifyingLabelValue) {
         super(identifyingLabelValue);
     }
