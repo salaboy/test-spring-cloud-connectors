@@ -1,4 +1,4 @@
-package org.salaboy.service.connectors;
+package org.salaboy.service.local.connectors;
 
 import org.springframework.cloud.localconfig.LocalConfigServiceInfoCreator;
 import org.springframework.cloud.service.ServiceInfo;

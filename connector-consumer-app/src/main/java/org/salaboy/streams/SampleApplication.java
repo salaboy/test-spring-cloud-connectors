@@ -20,10 +20,15 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @EnableBinding(MyChannels.class)
-
+@RestController
 public class SampleApplication implements CommandLineRunner {
 
     @Autowired
@@ -47,10 +52,16 @@ public class SampleApplication implements CommandLineRunner {
         }
     }
 
+    @RequestMapping(value = "/payment/{processDefId}", method = RequestMethod.POST)
+    public void consumePaymentIntegrationEventsRest(@RequestBody IntegrationEvent event, @PathVariable("processDefId") String processDefinitionId) {
+        System.out.println("Received Integration Event Via REST: " + event);
+        consumePaymentIntegrationEvents(event, processDefinitionId);
+    }
+
     @StreamListener(value = MyChannels.INTEGRATION_EVENTS_CONSUMER, condition = "headers['type']=='Payment'")
     public void consumePaymentIntegrationEvents(IntegrationEvent event,
                                                 @Header("processDefinitionId") String processDefinitionId) {
-        System.out.println("Recieved Integration Event: " + event);
+        System.out.println("Received Integration Event Via MQ: " + event);
         System.out.println("Integration Event with processDefId in header:" + processDefinitionId);
 
         PaymentService payment = cloud.getServiceConnector("payment",

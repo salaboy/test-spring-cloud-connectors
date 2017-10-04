@@ -1,0 +1,99 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: rabbitmq
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: rabbitmq
+      labels:
+        app: infrastructure
+        serviceType: message-broker
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:management
+          ports:
+          - containerPort: 5672
+          - containerPort: 15672
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: default
+spec:
+  selector:
+    serviceType: message-broker
+  ports:
+    - port: 5672
+      name: broker
+      targetPort: 5672
+    - port: 15672
+      name: admin
+      targetPort: 15672
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: payment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: payment
+      labels:
+        app: payment
+    spec:
+      containers:
+        - name: payment-service
+          image: salaboy/payment-service:latest
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: connector-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: connector-app
+      labels:
+        app: connector-app
+    spec:
+      containers:
+      - name: connector-app
+        image: salaboy/connector-app:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: connector-app
+  namespace: default
+spec:
+  selector:
+    app: connector-app
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30081 # uncomment for minikube, comment for Kube
+  type: NodePort #NodePort for minikube, LoadBalancer for Kube
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+  namespace: default
+spec:
+  selector:
+    app: payment
+    spring-cloud-service: payment
+  ports:
+    - port: 8081
+      targetPort: 8080
+  type: ClusterIP

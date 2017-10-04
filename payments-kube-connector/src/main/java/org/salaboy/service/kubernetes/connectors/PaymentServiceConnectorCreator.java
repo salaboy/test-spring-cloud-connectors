@@ -1,4 +1,4 @@
-package org.salaboy.service.connectors;
+package org.salaboy.service.kubernetes.connectors;
 
 import org.salaboy.service.api.PaymentService;
 import org.springframework.cloud.service.ServiceConnectorConfig;
