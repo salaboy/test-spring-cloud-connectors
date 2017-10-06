@@ -69,6 +69,9 @@ spec:
         image: salaboy/connector-app:latest
         ports:
         - containerPort: 8080
+        env:
+          - name: ACT_RABBITMQ_HOST
+          - value: rabbitmq
 ---
 apiVersion: v1
 kind: Service

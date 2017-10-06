@@ -12,6 +12,8 @@
     <spring.cloud.stream.version>Ditmars.M2</spring.cloud.stream.version>
     <maven.docker.plugin.version>0.21.0</maven.docker.plugin.version>
     <spring.cloud.kubernetes.version>0.2.1.BUILD-SNAPSHOT</spring.cloud.kubernetes.version>
+    <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
   </properties>
 
   <modules>
@@ -20,6 +22,7 @@
     <module>payments-kube-connector</module>
     <module>payments-service</module>
     <module>connector-consumer-app</module>
+    <module>connector-basic-app</module>
   </modules>
 
   <repositories>

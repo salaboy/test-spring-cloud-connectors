@@ -4,3 +4,7 @@ services:
   - docker
 jdk:
   - oraclejdk8
+before_install:
+  - mkdir /tmp/myApp/
+  - echo "spring.cloud.appId=myApp" > /tmp/myApp/spring-cloud.properties
+  - echo "spring.cloud.payment=payment://localhost:8081/payment" >> /tmp/myApp/spring-cloud.properties

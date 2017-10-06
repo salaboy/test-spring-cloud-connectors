@@ -131,6 +131,34 @@
       <build>
         <plugins>
           <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+              <failIfNoTests>false</failIfNoTests>
+              <trimStackTrace>false</trimStackTrace>
+              <excludes>
+                <exclude>**/*TestCase.java</exclude>
+                <exclude>**/*IT.java</exclude>
+              </excludes>
+              <runOrder>alphabetical</runOrder>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>${maven-failsafe-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <goals>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>docker-maven-plugin</artifactId>
             <version>${maven.docker.plugin.version}</version>
@@ -151,7 +179,7 @@
                 </image>
                 <image>
                   <name>rabbitmq:management</name>
-                  <alias>activiti-rabbitmq</alias>
+                  <alias>rabbitmq</alias>
                   <run>
                     <ports>
                       <port>5672:5672</port>
